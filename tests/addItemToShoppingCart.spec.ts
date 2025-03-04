@@ -1,22 +1,17 @@
 import { test } from '../fixture';
 
-test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-});
-
 test.describe('add item to shopping cart', () => {
-    test('add item to shopping cart for a new user', async ({ homePage, registrationPage, 
-        digitalDownloadsPage, shoppingCartPage }) => {
-        await homePage.clickRegistration();
-        await registrationPage.fillPersonalDetails();
-        await registrationPage.fillPassword();
-        await registrationPage.clickRegister();
-        await registrationPage.checkingRegisterCompletedPage();
-        await registrationPage.clickContinue();
-        await homePage.verifyRegisteredUser(registrationPage.userDetails);
-        await homePage.moveToDigitalDownloads();
-        const item = await digitalDownloadsPage.addRandomItemToCart();
-        await digitalDownloadsPage.waitForItemToBeAddedToShoppingCart();
-        await shoppingCartPage.verifyProductIsInTheCart(item);
+    test('add item to shopping cart for a new user', async ({ factory }) => {
+        await factory.homePage.clickRegistration();
+        await factory.registrationPage.fillPersonalDetails();
+        await factory.registrationPage.fillPassword();
+        await factory.registrationPage.clickRegister();
+        await factory.registrationPage.checkingRegisterCompletedPage();
+        await factory.registrationPage.clickContinue();
+        await factory.homePage.verifyRegisteredUser(factory.registrationPage.userDetails);
+        await factory.homePage.moveToDigitalDownloads();
+        const item = await factory.digitalDownloadsPage.addRandomItemToCart();
+        await factory.digitalDownloadsPage.waitForItemToBeAddedToShoppingCart();
+        await factory.shoppingCartPage.verifyProductIsInTheCart(item);
     });
 })

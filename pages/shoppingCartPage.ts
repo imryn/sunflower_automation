@@ -1,8 +1,7 @@
 import { Page } from '@playwright/test';
 import { BasePage } from "./basePage";
-import { assertText, checkElementContain, checkingNewUrl, findElement } from '../utils/helper';
+import { assertText, checkElementContain, checkingNewUrl } from '../utils/helper';
 import { ShoppingCartLinks } from '../utils/constants/constants';
-import { shoppingCartLocator } from '../locators/shoppingCartLocator';
 import { extractAString } from '../utils/base'
 
 /**
@@ -11,6 +10,8 @@ import { extractAString } from '../utils/base'
  */
 export class ShoppingCartPage extends BasePage{
 
+    private cartItemNameLocator = "td.product a.product-name";
+    private cartItemImgLocator = ".cart-item-row .product-picture img";
      /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
     */
@@ -29,8 +30,8 @@ export class ShoppingCartPage extends BasePage{
     */
     async verifyProductIsInTheCart(expectedItem: { itemName: string, itemPicture: string | null}) {
         await checkingNewUrl(this.page, ShoppingCartLinks.SHOPPING_CART_PATH);
-        const cartItemName = await findElement(this.page, shoppingCartLocator.cartItemName);
-        const cartItemImg = await findElement(this.page, shoppingCartLocator.cartItemImg);
+        const cartItemName = this.page.locator(this.cartItemNameLocator);
+        const cartItemImg = this.page.locator(this.cartItemImgLocator);
         const extractedItemPicture = extractAString(expectedItem.itemPicture ?? '')
         const extractedCartItemImg = extractAString(await cartItemImg.getAttribute('src') ?? '');
         await assertText(expectedItem.itemName, await cartItemName.innerText());

@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-import { registrationPageLocator } from '../locators/registrationPageLocator'
 import { 
          checkingNewUrl, 
          fillInput, 
@@ -22,6 +21,19 @@ export class RegistrationPage extends BasePage{
      */
     userDetails: UserDetails;
 
+    private genderLocator(genderValue: string) {
+        return  `input[id="gender-${genderValue}"]`;
+    }
+
+    private firstNameLocator = "input[id='FirstName']";
+    private lastNameLocator = "input[id='LastName']";
+    private emailLocator = "input[id='Email']";
+    private passwordLocator = "input[id='Password']";
+    private confirmationPasswordLocator = "input[id='ConfirmPassword']";
+    private registerButtonLocator = "input[id='register-button']";
+    private registeredUserEmailLocator = "a[href='link:///customer/info']";
+    private continueLocator = "Continue";
+
     /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
     */
@@ -34,10 +46,10 @@ export class RegistrationPage extends BasePage{
      * Fills in the user's personal details on the registration form.
      */
     async fillPersonalDetails() {
-        const gender = registrationPageLocator.getGender(this.userDetails.gender);
+        const gender = this.genderLocator(this.userDetails.gender);
         await findElementAndClick(this.page, gender);
         for (const key of Object.keys(this.userDetails).slice(1)) {
-            await fillInput(this.page, registrationPageLocator[key], this.userDetails[key]);
+            await fillInput(this.page, this[key + 'Locator'], this.userDetails[key]);
         };
 
     }
@@ -48,15 +60,15 @@ export class RegistrationPage extends BasePage{
      */
     async fillPassword() {
         const password = getPassword();
-        await fillInput(this.page, registrationPageLocator.password, password);
-        await fillInput(this.page, registrationPageLocator.confirmationPassword, password);
+        await fillInput(this.page, this.passwordLocator, password);
+        await fillInput(this.page, this.confirmationPasswordLocator, password);
     }
 
     /**
      * Clicks the "Register" button to submit the registration form.
      */
     async clickRegister() {
-        await findElementAndClick(this.page, registrationPageLocator.registerButton);
+        await findElementAndClick(this.page, this.registerButtonLocator);
     }
 
     /**
@@ -75,6 +87,6 @@ export class RegistrationPage extends BasePage{
      * This typically redirects the user to the next step after registration.
      */
     async clickContinue() {
-        await findElementByText(this.page, registrationPageLocator.continue, 'click')
+        await findElementByText(this.page, this.continueLocator, 'click')
     }
 }

@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './basePage';
-import { findElement, findElementAndClick, findElementByText, waitElementIsVisible } from '../utils/helper';
-import { digitalDownloadsPageLocator } from '../locators/digitalDownloadsLocator';
+import { findElementAndClick, findElementByText, waitElementIsVisible } from '../utils/helper';
 import { ShoppingCartMessages } from '../utils/constants/constants';
 
 /**
@@ -9,6 +8,11 @@ import { ShoppingCartMessages } from '../utils/constants/constants';
  * This class provides methods to interact with elements specific to the Digital Downloads page.
  */
 export class DigitalDownloadsPage extends BasePage{
+
+    private productTitleLocator = "h2.product-title a";
+    private productAddToCartLocator = "input[value='Add to cart']";
+    private productImgLocator = "div.product-item .picture img";
+    private shoppingCartLinkLocator = "p.content a[href='/cart']";
 
     /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
@@ -23,9 +27,9 @@ export class DigitalDownloadsPage extends BasePage{
      * and returns the name and image of the item added.
      */
     async addRandomItemToCart() {
-        const itemNames = await findElement(this.page, digitalDownloadsPageLocator.productTItle);  // Adjust the selector as needed
-        const itemImages = await findElement(this.page, digitalDownloadsPageLocator.productImg);
-        const addToCartButtons = await findElement(this.page, digitalDownloadsPageLocator.productAddToCart); // Adjust the selector for the button
+        const itemNames = this.page.locator(this.productTitleLocator);  // Adjust the selector as needed
+        const itemImages = this.page.locator(this.productImgLocator);
+        const addToCartButtons = this.page.locator(this.productAddToCartLocator); // Adjust the selector for the button
     
         // Get the total number of items
         const itemCount = await itemNames.count();
@@ -55,9 +59,9 @@ export class DigitalDownloadsPage extends BasePage{
      * This method checks for the "Product added" message and clicks the shopping cart link to navigate to the cart page.
      */
     async waitForItemToBeAddedToShoppingCart() {
-        await findElementByText(this.page, ShoppingCartMessages.PRODUCT_ADDED_MESSAGE)
-        const shoppingCart = await findElement(this.page, digitalDownloadsPageLocator.shoppingCartLink)
-        await waitElementIsVisible(shoppingCart)
-        await findElementAndClick(this.page, digitalDownloadsPageLocator.shoppingCartLink)
+        await findElementByText(this.page, ShoppingCartMessages.PRODUCT_ADDED_MESSAGE);
+        const shoppingCart = this.page.locator(this.shoppingCartLinkLocator);
+        await waitElementIsVisible(shoppingCart);
+        await findElementAndClick(this.page, this.shoppingCartLinkLocator);
     }
 }

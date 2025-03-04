@@ -1,22 +1,12 @@
 import { expect, Page } from '@playwright/test';
 
 /**
- * Finds an element on the page using the given locator.
- * @param page - The Playwright Page instance.
- * @param locator - The selector string to locate the element.
- * @returns A Locator instance for the found element.
- */
-export const findElement = async (page: Page, locator: string) => {
-    return page.locator(locator);
-}
-
-/**
  * Finds an element and clicks on it after ensuring it is visible.
  * @param page - The Playwright Page instance.
  * @param locator - The selector string to locate the element.
  */
 export const findElementAndClick = async (page: Page, locator: string) => {
-    const element = await findElement(page, locator);
+    const element = page.locator(locator);
     await waitElementIsVisible(element);
     await element.click();
 }
@@ -45,7 +35,7 @@ export const waitElementIsVisible = async (element: any) => {
  * @param text - The text to enter into the input field.
  */
 export const fillInput = async (page: Page, locator: string, text: string) => {
-    const element = await findElement(page, locator);
+    const element = page.locator(locator);
     await waitElementIsVisible(element); 
     await element.fill(text);
 };

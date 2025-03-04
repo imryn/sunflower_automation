@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-import { homePageLocator } from '../locators/homePageLocators'
 import {findElementAndClick, checkingNewUrl, findElementByText} from '../utils/helper';
 import { HomePageLinks } from '../utils/constants/constants';
 import { BasePage } from './basePage';
@@ -10,6 +9,9 @@ import { UserDetails } from '../utils/types/userDetails';
  * This class provides methods to interact with elements specific to the Home page.
 */
 export class HomePage extends BasePage{
+
+    private registerLocator = "a[href='/register']";
+    private digitalDownloadsLocator = "ul.top-menu li a[href='/digital-downloads']";
 
     /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
@@ -22,7 +24,7 @@ export class HomePage extends BasePage{
      * Clicks on the "Register" link in the homepage and verifies the URL changes to the registration page.
      */
     async clickRegistration() {
-        await findElementAndClick(this.page, homePageLocator.register)
+        await findElementAndClick(this.page, this.registerLocator)
         await checkingNewUrl(this.page, HomePageLinks.HOMEPAGE_REGISTER_PATH)
     }
 
@@ -41,7 +43,7 @@ export class HomePage extends BasePage{
      * This method clicks on the Digital Downloads link and verifies the URL changes accordingly.
      */
     async moveToDigitalDownloads() {
-        await findElementAndClick(this.page, homePageLocator.digitalDownloads)
+        await findElementAndClick(this.page, this.digitalDownloadsLocator)
         await checkingNewUrl(this.page, HomePageLinks.DIGITAL_DOWNLOADS_PATH)
     }
 }
