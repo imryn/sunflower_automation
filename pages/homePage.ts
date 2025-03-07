@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-import {findElementAndClick, checkingNewUrl, findElementByText} from '../utils/helper';
 import { HomePageLinks } from '../utils/constants/constants';
 import { BasePage } from './basePage';
 import { UserDetails } from '../utils/types/userDetails';
@@ -24,8 +23,8 @@ export class HomePage extends BasePage{
      * Clicks on the "Register" link in the homepage and verifies the URL changes to the registration page.
      */
     async clickRegistration() {
-        await findElementAndClick(this.page, this.registerLocator)
-        await checkingNewUrl(this.page, HomePageLinks.HOMEPAGE_REGISTER_PATH)
+        await this.findElementAndClick(this.registerLocator, 'registration link')
+        await this.checkingNewUrl(HomePageLinks.HOMEPAGE_REGISTER_PATH)
     }
 
      /**
@@ -35,7 +34,7 @@ export class HomePage extends BasePage{
      * @param {object} userDetails
      */
     async verifyRegisteredUser(userDetails: UserDetails) {
-        await findElementByText(this.page, userDetails.email);
+        await this.findElementByText(userDetails.email, 'email');
     }
 
     /**
@@ -43,7 +42,7 @@ export class HomePage extends BasePage{
      * This method clicks on the Digital Downloads link and verifies the URL changes accordingly.
      */
     async moveToDigitalDownloads() {
-        await findElementAndClick(this.page, this.digitalDownloadsLocator)
-        await checkingNewUrl(this.page, HomePageLinks.DIGITAL_DOWNLOADS_PATH)
+        await this.findElementAndClick(this.digitalDownloadsLocator, 'digital downloads link')
+        await this.checkingNewUrl(HomePageLinks.DIGITAL_DOWNLOADS_PATH)
     }
 }

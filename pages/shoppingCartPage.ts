@@ -1,6 +1,5 @@
 import { Page } from '@playwright/test';
 import { BasePage } from "./basePage";
-import { assertText, checkElementContain, checkingNewUrl } from '../utils/helper';
 import { ShoppingCartLinks } from '../utils/constants/constants';
 import { extractAString } from '../utils/base'
 
@@ -28,13 +27,12 @@ export class ShoppingCartPage extends BasePage{
     * @param {string | null} expectedItem.itemPicture - The URL of the expected product image.
     * The image URL could be `null` if not provided.
     */
-    async verifyProductIsInTheCart(expectedItem: { itemName: string, itemPicture: string | null}) {
-        await checkingNewUrl(this.page, ShoppingCartLinks.SHOPPING_CART_PATH);
+    async verifyProductIsInTheCart(expectedItem: { itemName: string, itemPicture: string}) {
+        await this.checkingNewUrl(ShoppingCartLinks.SHOPPING_CART_PATH);
         const cartItemName = this.page.locator(this.cartItemNameLocator);
         const cartItemImg = this.page.locator(this.cartItemImgLocator);
-        const extractedItemPicture = extractAString(expectedItem.itemPicture ?? '')
         const extractedCartItemImg = extractAString(await cartItemImg.getAttribute('src') ?? '');
-        await assertText(expectedItem.itemName, await cartItemName.innerText());
-        await checkElementContain(extractedItemPicture, extractedCartItemImg);
+        await this.assertText(expectedItem.itemName, await cartItemName.innerText());
+        await this.checkElementContain(expectedItem.itemPicture, extractedCartItemImg);
     }
 }

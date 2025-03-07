@@ -1,6 +1,5 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './basePage';
-import { findElementAndClick, findElementByText, waitElementIsVisible } from '../utils/helper';
 import { ShoppingCartMessages } from '../utils/constants/constants';
 
 /**
@@ -44,6 +43,10 @@ export class DigitalDownloadsPage extends BasePage{
         const itemName = await itemNames.nth(randomIndex).innerText();
         const itemPicture = await itemImages.nth(randomIndex).getAttribute('src');
 
+        if (!itemPicture) {
+            throw new Error(`Image not found for item at index ${randomIndex}`);
+        }
+
         // Click the "Add to Cart" button of the randomly selected item
         await addToCartButtons.nth(randomIndex).click();
     
@@ -59,9 +62,7 @@ export class DigitalDownloadsPage extends BasePage{
      * This method checks for the "Product added" message and clicks the shopping cart link to navigate to the cart page.
      */
     async waitForItemToBeAddedToShoppingCart() {
-        await findElementByText(this.page, ShoppingCartMessages.PRODUCT_ADDED_MESSAGE);
-        const shoppingCart = this.page.locator(this.shoppingCartLinkLocator);
-        await waitElementIsVisible(shoppingCart);
-        await findElementAndClick(this.page, this.shoppingCartLinkLocator);
+        await this.findElementByText(ShoppingCartMessages.PRODUCT_ADDED_MESSAGE, 'product added message');
+        await this.findElementAndClick(this.shoppingCartLinkLocator, 'shopping cart link');
     }
 }

@@ -1,10 +1,4 @@
 import { Page } from '@playwright/test';
-import { 
-         checkingNewUrl, 
-         fillInput, 
-         findElementAndClick,
-         findElementByText
-        } from '../utils/helper';
 import { getPassword, getRandomPersonalDetails } from '../utils/base'
 import { RegistrationMessages } from '../utils/constants/constants';
 import { BasePage } from './basePage';
@@ -47,9 +41,10 @@ export class RegistrationPage extends BasePage{
      */
     async fillPersonalDetails() {
         const gender = this.genderLocator(this.userDetails.gender);
-        await findElementAndClick(this.page, gender);
-        for (const key of Object.keys(this.userDetails).slice(1)) {
-            await fillInput(this.page, this[key + 'Locator'], this.userDetails[key]);
+        await this.findElementAndClick(gender, 'Gender field');
+        for (const key of Object.keys(this.userDetails).slice(1) as Array<keyof UserDetails>) {
+            const locator = this[`${key}Locator` as keyof this];
+            await this.fillInput(locator as string, key,this.userDetails[key]);
         };
 
     }
@@ -60,15 +55,15 @@ export class RegistrationPage extends BasePage{
      */
     async fillPassword() {
         const password = getPassword();
-        await fillInput(this.page, this.passwordLocator, password);
-        await fillInput(this.page, this.confirmationPasswordLocator, password);
+        await this.fillInput(this.passwordLocator, 'password', password);
+        await this.fillInput(this.confirmationPasswordLocator, 'confirmation password', password);
     }
 
     /**
      * Clicks the "Register" button to submit the registration form.
      */
     async clickRegister() {
-        await findElementAndClick(this.page, this.registerButtonLocator);
+        await this.findElementAndClick(this.registerButtonLocator, 'register button');
     }
 
     /**
@@ -77,9 +72,9 @@ export class RegistrationPage extends BasePage{
      * and verifies that the success message and registered user's email are visible.
      */
     async checkingRegisterCompletedPage() {
-        await checkingNewUrl(this.page, RegistrationMessages.REGISTRATION_COMPLETED_PATH);
-        await findElementByText(this.page, RegistrationMessages.REGISTRATION_COMPLETED)
-        await findElementByText(this.page, this.userDetails.email);
+        await this.checkingNewUrl(RegistrationMessages.REGISTRATION_COMPLETED_PATH);
+        await this.findElementByText(RegistrationMessages.REGISTRATION_COMPLETED, 'registration completed message')
+        await this.findElementByText(this.userDetails.email, 'email');
     }
 
      /**
@@ -87,6 +82,6 @@ export class RegistrationPage extends BasePage{
      * This typically redirects the user to the next step after registration.
      */
     async clickContinue() {
-        await findElementByText(this.page, this.continueLocator, 'click')
+        await this.findElementByText(this.continueLocator, 'continue button' ,'click')
     }
 }
