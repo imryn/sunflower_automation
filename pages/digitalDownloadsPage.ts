@@ -62,7 +62,7 @@ export class DigitalDownloadsPage extends BasePage{
      * This method checks for the "Product added" message and clicks the shopping cart link to navigate to the cart page.
      */
     async waitForItemToBeAddedToShoppingCart() {
-        await this.findElementByText(ShoppingCartMessages.PRODUCT_ADDED_MESSAGE, 'product added message');
-        await this.findElementAndClick(this.shoppingCartLinkLocator, 'shopping cart link');
+        await this.findElementByText(ShoppingCartMessages.PRODUCT_ADDED_MESSAGE);
+        await this.findElementAndClick(this.shoppingCartLinkLocator);
     }
 }

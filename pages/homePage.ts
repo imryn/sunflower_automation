@@ -23,7 +23,7 @@ export class HomePage extends BasePage{
      * Clicks on the "Register" link in the homepage and verifies the URL changes to the registration page.
      */
     async clickRegistration() {
-        await this.findElementAndClick(this.registerLocator, 'registration link')
+        await this.findElementAndClick(this.registerLocator)
         await this.checkingNewUrl(HomePageLinks.HOMEPAGE_REGISTER_PATH)
     }
 
@@ -34,7 +34,7 @@ export class HomePage extends BasePage{
      * @param {object} userDetails
      */
     async verifyRegisteredUser(userDetails: UserDetails) {
-        await this.findElementByText(userDetails.email, 'email');
+        await this.findElementByText(userDetails.email);
     }
 
     /**
@@ -42,7 +42,7 @@ export class HomePage extends BasePage{
      * This method clicks on the Digital Downloads link and verifies the URL changes accordingly.
      */
     async moveToDigitalDownloads() {
-        await this.findElementAndClick(this.digitalDownloadsLocator, 'digital downloads link')
+        await this.findElementAndClick(this.digitalDownloadsLocator)
         await this.checkingNewUrl(HomePageLinks.DIGITAL_DOWNLOADS_PATH)
     }
 }

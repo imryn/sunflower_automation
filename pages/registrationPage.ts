@@ -41,10 +41,10 @@ export class RegistrationPage extends BasePage{
      */
     async fillPersonalDetails() {
         const gender = this.genderLocator(this.userDetails.gender);
-        await this.findElementAndClick(gender, 'Gender field');
+        await this.findElementAndClick(gender);
         for (const key of Object.keys(this.userDetails).slice(1) as Array<keyof UserDetails>) {
             const locator = this[`${key}Locator` as keyof this];
-            await this.fillInput(locator as string, key,this.userDetails[key]);
+            await this.fillInput(locator as string,this.userDetails[key]);
         };
 
     }
@@ -55,15 +55,15 @@ export class RegistrationPage extends BasePage{
      */
     async fillPassword() {
         const password = getPassword();
-        await this.fillInput(this.passwordLocator, 'password', password);
-        await this.fillInput(this.confirmationPasswordLocator, 'confirmation password', password);
+        await this.fillInput(this.passwordLocator, password);
+        await this.fillInput(this.confirmationPasswordLocator, password);
     }
 
     /**
      * Clicks the "Register" button to submit the registration form.
      */
     async clickRegister() {
-        await this.findElementAndClick(this.registerButtonLocator, 'register button');
+        await this.findElementAndClick(this.registerButtonLocator);
     }
 
     /**
@@ -73,8 +73,8 @@ export class RegistrationPage extends BasePage{
      */
     async checkingRegisterCompletedPage() {
         await this.checkingNewUrl(RegistrationMessages.REGISTRATION_COMPLETED_PATH);
-        await this.findElementByText(RegistrationMessages.REGISTRATION_COMPLETED, 'registration completed message')
-        await this.findElementByText(this.userDetails.email, 'email');
+        await this.findElementByText(RegistrationMessages.REGISTRATION_COMPLETED)
+        await this.findElementByText(this.userDetails.email);
     }
 
      /**
@@ -82,6 +82,6 @@ export class RegistrationPage extends BasePage{
      * This typically redirects the user to the next step after registration.
      */
     async clickContinue() {
-        await this.findElementByText(this.continueLocator, 'continue button' ,'click')
+        await this.findElementByText(this.continueLocator ,'click')
     }
 }

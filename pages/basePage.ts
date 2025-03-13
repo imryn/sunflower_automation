@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 /**
  * Represents a base page that provides common functionality for interacting with pages in the application.
@@ -17,9 +17,9 @@ export class BasePage {
  * @param page - The Playwright Page instance.
  * @param locator - The selector string to locate the element.
  */
-    async findElementAndClick (locator: string, elementName: string) {
+    async findElementAndClick (locator: string) {
         const element = this.page.locator(locator);
-        await this.waitElementIsVisible(element, elementName);
+        await this.waitElementIsVisible(element);
         await element.click();
     }
 
@@ -29,16 +29,16 @@ export class BasePage {
      * @param path - The expected URL path.
      */
     async checkingNewUrl (path: string) {
-        this.page.waitForURL(path);
+        await this.page.waitForURL(path);
     }
 
     /**
      * Waits until the given element is visible.
      * @param element - The Locator instance of the element to check.
      */
-    async waitElementIsVisible (element: any, elementName: string) {
+    async waitElementIsVisible (element: Locator) {
         await expect(element).toBeVisible({ timeout: 5000 })
-              .catch(() => { throw new Error(`Error: ${elementName} not found!`) });
+              .catch(() => { throw new Error(`Error: ${element} not found!`) });
     }
 
     /**
@@ -47,9 +47,9 @@ export class BasePage {
      * @param locator - The selector string to locate the input field.
      * @param text - The text to enter into the input field.
      */
-    async fillInput (locator: string, elementName: string, text: string) {
+    async fillInput (locator: string, text: string) {
         const element = this.page.locator(locator);
-        await this.waitElementIsVisible(element, elementName);
+        await this.waitElementIsVisible(element);
         await element.fill(text);
     };
 
@@ -59,9 +59,9 @@ export class BasePage {
      * @param text - The text content of the element to find.
      * @param action - Optional action ('click' or 'none', default is 'none').
      */
-    async findElementByText (text: string, elementName: string, action: 'click' | 'none' = 'none') {
+    async findElementByText (text: string, action: 'click' | 'none' = 'none') {
         const element = this.page.getByText(text);
-        this.waitElementIsVisible(element, elementName);
+        await this.waitElementIsVisible(element);
         
         if (action === 'click') {
             await element.click();
