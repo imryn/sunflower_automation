@@ -1,4 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 /**
  * Represents a base page that provides common functionality for interacting with pages in the application.
@@ -89,3 +90,14 @@ export class BasePage {
     }
 
 }
+
+export function step(stepName? : string) {
+    return function decorator(target: Function, context: ClassMethodDecoratorContext) {
+        return function replacementMethod(...args: any) {
+         const name = stepName || `${this.constructorname}.${(context.name as string)}`
+         return test.step(name, async () => {
+             return await target.call(this, ...args)
+         })
+        }
+     }
+} 

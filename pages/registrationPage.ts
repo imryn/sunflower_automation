@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { getPassword, getRandomPersonalDetails } from '../utils/base'
 import { RegistrationMessages } from '../utils/constants/constants';
-import { BasePage } from './basePage';
+import { BasePage, step } from './basePage';
 import { UserDetails } from '../utils/types/userDetails';
 
 /**
@@ -39,6 +39,7 @@ export class RegistrationPage extends BasePage{
     /**
      * Fills in the user's personal details on the registration form.
      */
+    @step('Fill personal detatils form')
     async fillPersonalDetails() {
         const gender = this.genderLocator(this.userDetails.gender);
         await this.findElementAndClick(gender);
@@ -53,6 +54,7 @@ export class RegistrationPage extends BasePage{
      * Fills in the password and confirmation password fields on the registration form.
      * A random password is generated and entered into both fields.
      */
+    @step('Fill password form')
     async fillPassword() {
         const password = getPassword();
         await this.fillInput(this.passwordLocator, password);
@@ -62,6 +64,7 @@ export class RegistrationPage extends BasePage{
     /**
      * Clicks the "Register" button to submit the registration form.
      */
+    @step('Click register')
     async clickRegister() {
         await this.findElementAndClick(this.registerButtonLocator);
     }
@@ -71,6 +74,7 @@ export class RegistrationPage extends BasePage{
      * This method checks if the current URL corresponds to the registration completion page
      * and verifies that the success message and registered user's email are visible.
      */
+    @step('Check user was registered')
     async checkingRegisterCompletedPage() {
         await this.checkingNewUrl(RegistrationMessages.REGISTRATION_COMPLETED_PATH);
         await this.findElementByText(RegistrationMessages.REGISTRATION_COMPLETED)
@@ -81,6 +85,7 @@ export class RegistrationPage extends BasePage{
      * Clicks the "Continue" button after registration is completed.
      * This typically redirects the user to the next step after registration.
      */
+     @step('Click continue')
     async clickContinue() {
         await this.findElementByText(this.continueLocator ,'click')
     }

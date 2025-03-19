@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './basePage';
+import { BasePage, step } from './basePage';
 import { ShoppingCartMessages } from '../utils/constants/constants';
 
 /**
@@ -8,16 +8,20 @@ import { ShoppingCartMessages } from '../utils/constants/constants';
  */
 export class DigitalDownloadsPage extends BasePage{
 
-    private productTitleLocator = "h2.product-title a";
-    private productAddToCartLocator = "input[value='Add to cart']";
-    private productImgLocator = "div.product-item .picture img";
-    private shoppingCartLinkLocator = "p.content a[href='/cart']";
+    readonly productTitleLocator: string
+    readonly productAddToCartLocator: string
+    readonly productImgLocator: string
+    readonly shoppingCartLinkLocator: string
 
     /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
     */
     constructor(page: Page) {
         super(page);
+        this.productTitleLocator = "h2.product-title a";
+        this.productAddToCartLocator = "input[value='Add to cart']";
+        this.productImgLocator = "div.product-item .picture img";
+        this.shoppingCartLinkLocator = "p.content a[href='/cart']";
     }
 
      /**
@@ -25,6 +29,7 @@ export class DigitalDownloadsPage extends BasePage{
      * This method selects a random product from the list, clicks the "Add to Cart" button,
      * and returns the name and image of the item added.
      */
+    @step('Add item from digital downloads page to shopping cart')
     async addRandomItemToCart() {
         const itemNames = this.page.locator(this.productTitleLocator);  // Adjust the selector as needed
         const itemImages = this.page.locator(this.productImgLocator);
@@ -61,6 +66,7 @@ export class DigitalDownloadsPage extends BasePage{
      * Waits for an item to be added to the shopping cart and navigates to the cart page.
      * This method checks for the "Product added" message and clicks the shopping cart link to navigate to the cart page.
      */
+    @step('Check get message of item was added to the shopping cart')
     async waitForItemToBeAddedToShoppingCart() {
         await this.findElementByText(ShoppingCartMessages.PRODUCT_ADDED_MESSAGE);
         await this.findElementAndClick(this.shoppingCartLinkLocator);

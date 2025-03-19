@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BasePage } from "./basePage";
+import { BasePage, step } from "./basePage";
 import { ShoppingCartLinks } from '../utils/constants/constants';
 import { extractAString } from '../utils/base'
 
@@ -9,13 +9,15 @@ import { extractAString } from '../utils/base'
  */
 export class ShoppingCartPage extends BasePage{
 
-    private cartItemNameLocator = "td.product a.product-name";
-    private cartItemImgLocator = ".cart-item-row .product-picture img";
+    readonly cartItemNameLocator: string
+    readonly cartItemImgLocator: string
      /**
     * @param {Page} page - The Playwright Page object representing the current browser page.
     */
     constructor(page: Page) {
         super(page);
+        this.cartItemNameLocator = "td.product a.product-name";
+        this.cartItemImgLocator = ".cart-item-row .product-picture img";
     }
 
     /**
@@ -27,6 +29,7 @@ export class ShoppingCartPage extends BasePage{
     * @param {string | null} expectedItem.itemPicture - The URL of the expected product image.
     * The image URL could be `null` if not provided.
     */
+    @step('Verify the correct item was added to the shopping cart')
     async verifyProductIsInTheCart(expectedItem: { itemName: string, itemPicture: string}) {
         await this.checkingNewUrl(ShoppingCartLinks.SHOPPING_CART_PATH);
         const cartItemName = this.page.locator(this.cartItemNameLocator);
